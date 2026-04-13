@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TalkServe AI — AI Receptionist for Restaurants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0a0a0a;
+  --surface:#111;
+  --border:rgba(255,255,255,0.08);
+  --text:#f0f0f0;
+  --muted:#888;
+  --muted2:#555;
+  --gold:#c9a84c;
+  --gold-light:#e8c96a;
+  --green:#22c55e;
+  --accent:#1a1a1a;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-logo{font-size:1.1rem;font-weight:700;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:0.5rem;}
+.nav-links{display:flex;align-items:center;gap:2rem;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.875rem;transition:color 0.2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{background:var(--gold);color:#000;padding:0.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:0.875rem;text-decoration:none;transition:background 0.2s;}
+.nav-cta:hover{background:var(--gold-light);}
+.nav-badge{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.3);padding:0.25rem 0.75rem;border-radius:20px;font-size:0.75rem;font-weight:500;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all 0.3s;}
+@media(max-width:768px){
+  .nav-links{display:none;}.hamburger{display:flex;}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:1.5rem 2rem;gap:1.25rem;}
+}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 80% 60% at 30% 0%,rgba(201,168,76,0.08) 0%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr;gap:3rem;text-align:center;}
+  .hero-btns{justify-content:center;}
+  .hero-right{display:none;}
+}
+.hero-left{position:relative;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);color:var(--green);padding:0.375rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:500;margin-bottom:2rem;}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4rem);line-height:1.1;margin-bottom:1.5rem;font-weight:700;}
+h1 em{color:var(--gold);font-style:italic;}
+.hero-sub{font-size:1rem;color:var(--muted);max-width:500px;margin-bottom:2.5rem;line-height:1.7;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-gold{background:var(--gold);color:#000;padding:0.875rem 2rem;border-radius:10px;font-weight:700;font-size:0.95rem;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-outline{border:1px solid var(--border);color:var(--text);padding:0.875rem 2rem;border-radius:10px;font-weight:500;font-size:0.95rem;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.hero-stats{display:flex;gap:2rem;margin-top:3rem;flex-wrap:wrap;}
+.stat{text-align:left;}
+.stat-num{font-size:2rem;font-weight:700;color:var(--gold);}
+.stat-label{font-size:0.8rem;color:var(--muted);margin-top:0.25rem;}
+/* Hero right side - visual card */
+.hero-right{position:relative;}
+.hero-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 0 60px rgba(201,168,76,0.08);}
+.hero-card-header{background:#161616;padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem;border-bottom:1px solid var(--border);}
+.chat-avatar{width:38px;height:38px;background:linear-gradient(135deg,var(--gold),#8b6914);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.chat-name{font-weight:600;font-size:0.9rem;}
+.chat-status{font-size:0.75rem;color:var(--green);display:flex;align-items:center;gap:0.3rem;}
+.chat-status::before{content:'';width:5px;height:5px;background:var(--green);border-radius:50%;}
+.hero-card-body{padding:1.25rem;display:flex;flex-direction:column;gap:0.75rem;}
+.msg{max-width:85%;padding:0.6rem 0.9rem;border-radius:12px;font-size:0.85rem;line-height:1.5;}
+.msg-ai{background:#1e1e1e;border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;}
+.msg-user{background:var(--gold);color:#000;align-self:flex-end;border-bottom-right-radius:4px;font-weight:500;}
+.hero-card-footer{padding:0.875rem 1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.hero-card-footer span{font-size:0.8rem;color:var(--muted);}
+.hero-call-badge{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);color:var(--green);padding:0.3rem 0.75rem;border-radius:20px;font-size:0.75rem;font-weight:600;text-decoration:none;}
+/* Floating notification */
+.float-notif{position:absolute;bottom:-20px;right:-20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0.75rem 1rem;display:flex;align-items:center;gap:0.75rem;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+.float-notif-icon{width:32px;height:32px;background:rgba(34,197,94,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.float-notif-text{font-size:0.75rem;}
+.float-notif-text strong{display:block;color:var(--text);}
+.float-notif-text span{color:var(--muted);}
+
+/* TICKER */
+.ticker{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1rem 0;overflow:hidden;background:rgba(255,255,255,0.02);}
+.ticker-track{display:flex;gap:3rem;animation:ticker 25s linear infinite;white-space:nowrap;}
+.ticker-item{font-size:0.8rem;font-weight:600;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;display:flex;align-items:center;gap:0.5rem;}
+.ticker-item::before{content:'✦';color:var(--gold);}
+@keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* TRUSTED */
+.trusted{padding:2rem;text-align:center;border-bottom:1px solid var(--border);}
+.trusted p{font-size:0.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.5rem;}
+.trusted-logos{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;}
+.trusted-logo{font-size:0.85rem;color:var(--muted2);font-weight:500;}
+
+/* SECTIONS */
+.pad{padding:6rem 2rem;}
+.section-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold);font-weight:600;margin-bottom:0.75rem;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.2;margin-bottom:1rem;}
+.section-title em{color:var(--gold);font-style:italic;}
+.fade{max-width:640px;margin-bottom:4rem;}
+
+/* PROBLEMS */
+#problems{background:linear-gradient(180deg,var(--bg) 0%,rgba(20,12,0,0.5) 100%);}
+.problems-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto;}
+.problem-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.75rem;transition:border-color 0.2s;}
+.problem-card:hover{border-color:rgba(201,168,76,0.3);}
+.problem-num{font-size:0.75rem;font-weight:700;color:var(--muted2);letter-spacing:0.1em;margin-bottom:1rem;}
+.problem-title{font-weight:600;margin-bottom:0.5rem;font-size:1rem;}
+.problem-desc{font-size:0.875rem;color:var(--muted);line-height:1.6;}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto;}
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;transition:all 0.2s;}
+.feature-card:hover{transform:translateY(-3px);border-color:rgba(201,168,76,0.3);}
+.feature-icon{font-size:2rem;margin-bottom:1rem;}
+.feature-name{font-weight:700;font-size:1.05rem;margin-bottom:0.5rem;}
+.feature-desc{font-size:0.875rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+.feature-badge{display:inline-block;font-size:0.7rem;padding:0.25rem 0.6rem;border-radius:20px;font-weight:600;}
+.badge-live{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.25);}
+.badge-soon{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border);}
+
+/* HOW IT WORKS */
+#how{background:rgba(255,255,255,0.02);}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;max-width:1000px;margin:0 auto;position:relative;}
+.step{text-align:center;padding:1.5rem;}
+.step-num{width:56px;height:56px;background:linear-gradient(135deg,var(--gold),#8b6914);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;color:#000;margin:0 auto 1.25rem;}
+.step-title{font-weight:700;margin-bottom:0.5rem;}
+.step-desc{font-size:0.875rem;color:var(--muted);line-height:1.6;}
+
+/* DEMO SECTION */
+#demo{background:linear-gradient(180deg,var(--bg),rgba(20,12,0,0.6));}
+.demo-container{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;max-width:1000px;margin:0 auto;}
+@media(max-width:768px){
+  .demo-container{grid-template-columns:1fr;gap:2rem;}
+}
+.demo-phone{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:2rem;text-align:center;}
+.demo-phone-num{font-size:2rem;font-weight:700;color:var(--gold);margin-bottom:0.5rem;}
+.demo-phone-sub{font-size:0.875rem;color:var(--muted);margin-bottom:2rem;}
+.demo-call-btn{display:inline-block;background:var(--green);color:#000;padding:1rem 2.5rem;border-radius:50px;font-weight:700;font-size:1rem;text-decoration:none;transition:all 0.2s;}
+.demo-call-btn:hover{transform:scale(1.05);background:#16a34a;}
+.demo-meta{margin-top:1.5rem;font-size:0.75rem;color:var(--muted);}
+.demo-tags{display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;margin-top:1rem;}
+.demo-tag{background:rgba(255,255,255,0.05);border:1px solid var(--border);padding:0.25rem 0.75rem;border-radius:20px;font-size:0.75rem;color:var(--muted);}
+.demo-chat{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+.demo-chat-header{background:#1a1a1a;padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem;border-bottom:1px solid var(--border);}
+.demo-chat-body{padding:1.25rem;display:flex;flex-direction:column;gap:0.75rem;min-height:220px;max-height:300px;overflow-y:auto;}
+.demo-chat-input{border-top:1px solid var(--border);padding:0.875rem 1rem;display:flex;gap:0.5rem;}
+.demo-chat-input input{flex:1;background:transparent;border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.875rem;color:var(--text);font-size:0.85rem;font-family:inherit;outline:none;}
+.demo-chat-input input:focus{border-color:var(--gold);}
+.demo-chat-input button{background:var(--gold);color:#000;border:none;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;font-weight:600;font-size:0.85rem;white-space:nowrap;}
+
+/* INVESTMENT / NO PRICING */
+#pricing{background:rgba(255,255,255,0.02);}
+.investment-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:1000px;margin:0 auto;}
+.investment-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;transition:all 0.2s;}
+.investment-card:hover{border-color:rgba(201,168,76,0.4);transform:translateY(-3px);}
+.investment-card.featured{border-color:rgba(201,168,76,0.4);background:linear-gradient(135deg,rgba(201,168,76,0.05),var(--surface));}
+.investment-badge{display:inline-block;background:var(--gold);color:#000;font-size:0.7rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:20px;margin-bottom:1rem;letter-spacing:0.05em;text-transform:uppercase;}
+.investment-name{font-weight:700;font-size:1.15rem;margin-bottom:0.25rem;}
+.investment-tagline{font-size:0.85rem;color:var(--gold);font-weight:500;margin-bottom:1rem;}
+.investment-desc{font-size:0.875rem;color:var(--muted);line-height:1.6;margin-bottom:1.5rem;}
+.investment-features{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:2rem;}
+.investment-features li{font-size:0.875rem;color:var(--muted);display:flex;align-items:center;gap:0.6rem;}
+.investment-features li::before{content:'✓';color:var(--gold);font-weight:700;flex-shrink:0;}
+.investment-note{text-align:center;margin-top:3rem;padding:2rem;background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.15);border-radius:16px;max-width:680px;margin-left:auto;margin-right:auto;}
+.investment-note p{color:var(--muted);font-size:0.9rem;margin-bottom:1rem;}
+.investment-note strong{color:var(--text);}
+
+/* CTA */
+#cta{text-align:center;padding:6rem 2rem;background:linear-gradient(135deg,rgba(201,168,76,0.06),transparent);}
+#cta .section-title{font-size:clamp(2rem,5vw,3.5rem);}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1100px;margin:0 auto;}
+@media(max-width:768px){footer{grid-template-columns:1fr 1fr;gap:2rem;}}
+@media(max-width:480px){footer{grid-template-columns:1fr;}}
+.footer-brand{font-size:1.1rem;font-weight:700;margin-bottom:0.75rem;}
+.footer-desc{font-size:0.85rem;color:var(--muted);line-height:1.6;}
+.footer-col h4{font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted2);margin-bottom:1rem;}
+.footer-col a{display:block;font-size:0.875rem;color:var(--muted);text-decoration:none;margin-bottom:0.5rem;transition:color 0.2s;}
+.footer-col a:hover{color:var(--text);}
+.footer-bottom{border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:0.8rem;color:var(--muted);}
+
+/* TYPING ANIMATION */
+.typing{display:flex;gap:4px;align-items:center;padding:0.5rem 0;}
+.typing span{width:6px;height:6px;background:var(--muted2);border-radius:50%;animation:typing-dot 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:0.2s;}
+.typing span:nth-child(3){animation-delay:0.4s;}
+@keyframes typing-dot{0%,60%,100%{transform:translateY(0);opacity:0.4;}30%{transform:translateY(-4px);opacity:1;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">🎙 TalkServe AI</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#demo">Live Demo</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="/cdn-cgi/l/email-protection#482627252926292025292c3229217b7b082f25292124662b2725" class="nav-cta">Get Early Access</a></li>
+  </ul>
+  <span class="nav-badge">Live in Houston, TX</span>
+  <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">● Live & answering calls right now</div>
+      <h1>Never Miss a Call.<br/><em>Never Lose</em> a Customer.</h1>
+      <p class="hero-sub">TalkServe AI deploys intelligent receptionists and chatbots that handle reservations, food orders, and customer queries — 24 hours a day, 7 days a week.</p>
+      <div class="hero-btns">
+        <a href="/cdn-cgi/l/email-protection#1f7170727e717e77727e7b657e762c2c5f78727e7673317c7072" class="btn-gold">Get Early Access →</a>
+        <a href="#demo" class="btn-outline">Hear It Live</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Always available</div></div>
+        <div class="stat"><div class="stat-num">3 min</div><div class="stat-label">Setup time</div></div>
+        <div class="stat"><div class="stat-num">40%</div><div class="stat-label">More leads captured</div></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <div class="chat-avatar">🤖</div>
+          <div>
+            <div class="chat-name">Tolo Kabab House AI</div>
+            <div class="chat-status">Online — Ready to answer</div>
+          </div>
+        </div>
+        <div class="hero-card-body">
+          <div class="msg msg-ai">Hi! Welcome to Tolo Kabab House. How can I help you today? 😊</div>
+          <div class="msg msg-user">Do you have a table for 4 tonight?</div>
+          <div class="msg msg-ai">Absolutely! We have availability tonight. What time works best for your party of 4?</div>
+          <div class="msg msg-user">Around 7:30pm</div>
+          <div class="msg msg-ai">Perfect — I've noted a reservation for 4 guests at 7:30 PM tonight. May I get your name? 🍽️</div>
+        </div>
+        <div class="hero-card-footer">
+          <span>⚡ Powered by OpenAI</span>
+          <a href="tel:+18324301032" class="hero-call-badge">📞 Call Live</a>
+        </div>
+      </div>
+      <div class="float-notif">
+        <div class="float-notif-icon">📞</div>
+        <div class="float-notif-text">
+          <strong>New reservation booked</strong>
+          <span>Just now via AI · Table for 4</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Voice Calls Answered 24/7</span>
+    <span class="ticker-item">WhatsApp Automation</span>
+    <span class="ticker-item">Email Auto-Reply</span>
+    <span class="ticker-item">Reservation Management</span>
+    <span class="ticker-item">Zero Missed Calls</span>
+    <span class="ticker-item">Powered by OpenAI</span>
+    <span class="ticker-item">Multilingual AI</span>
+    <span class="ticker-item">Voice Calls Answered 24/7</span>
+    <span class="ticker-item">WhatsApp Automation</span>
+    <span class="ticker-item">Email Auto-Reply</span>
+    <span class="ticker-item">Reservation Management</span>
+    <span class="ticker-item">Zero Missed Calls</span>
+    <span class="ticker-item">Powered by OpenAI</span>
+    <span class="ticker-item">Multilingual AI</span>
+  </div>
+</div>
+
+<!-- TRUSTED -->
+<div class="trusted">
+  <p>Trusted by restaurants in Houston</p>
+  <div class="trusted-logos">
+    <span class="trusted-logo">Tolo Kabab House</span>
+    <span class="trusted-logo">Bella's Kitchen</span>
+    <span class="trusted-logo">The Grand Grill</span>
+    <span class="trusted-logo">Spice Route</span>
+    <span class="trusted-logo">Harbor Bites</span>
+    <span class="trusted-logo">Urban Eats Co.</span>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<section class="pad" id="problems">
+  <div class="fade">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-title">Your restaurant is losing money <em>every single day</em></h2>
+    <p style="color:var(--muted);font-size:1rem;">Every missed call is a lost reservation. Every unanswered WhatsApp is a customer going somewhere else. You can't be on the phone 24/7 — but your AI can.</p>
+  </div>
+  <div class="problems-grid">
+    <div class="problem-card">
+      <div class="problem-num">01</div>
+      <div class="problem-title">Missed calls during rush hour</div>
+      <p class="problem-desc">Customers call while you're busy cooking. They don't leave voicemails. They just go to the competition.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">02</div>
+      <div class="problem-title">WhatsApp goes unanswered for hours</div>
+      <p class="problem-desc">Customers message at 11pm asking about tomorrow's reservations. Nobody replies until the next day.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">03</div>
+      <div class="problem-title">Staff wasting time on repetitive questions</div>
+      <p class="problem-desc">"What are your hours?" "Is the food halal?" — same questions, 50 times a day.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">04</div>
+      <div class="problem-title">Hiring staff just to answer phones is expensive</div>
+      <p class="problem-desc">A full-time receptionist costs $2,000–3,000/month. TalkServe AI costs a fraction of that.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="pad" id="features">
+  <div class="fade">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">Three channels. One AI. <em>Zero missed customers.</em></h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📞</div>
+      <div class="feature-name">AI Voice Receptionist</div>
+      <p class="feature-desc">Your AI answers every call instantly. It knows your menu, hours, location, and takes reservations in real time — in a natural, human-sounding voice powered by OpenAI.</p>
+      <span class="feature-badge badge-live">● Live Now</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <div class="feature-name">WhatsApp Chatbot</div>
+      <p class="feature-desc">Auto-reply to WhatsApp messages instantly. Answer questions, confirm reservations, share your menu, and handle requests — all automatically.</p>
+      <span class="feature-badge badge-soon">Coming Soon</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📧</div>
+      <div class="feature-name">Email Auto-Reply</div>
+      <p class="feature-desc">AI reads incoming emails and replies automatically. Catering inquiries, reservation requests, feedback — handled within seconds.</p>
+      <span class="feature-badge badge-soon">Coming Soon</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-name">Reservations Dashboard</div>
+      <p class="feature-desc">See all reservations, leads, and customer interactions in one place. Export data, track patterns, and never lose a booking again.</p>
+      <span class="feature-badge badge-soon">Coming Soon</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-name">Multi-Language Support</div>
+      <p class="feature-desc">Serve customers in English, Spanish, Arabic, Pashto, Dari, and more. The AI switches languages automatically based on the customer.</p>
+      <span class="feature-badge badge-live">● Live Now</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-name">Instant Setup</div>
+      <p class="feature-desc">We set everything up for you in under 24 hours. No technical knowledge needed. Just give us your restaurant info and we handle the rest.</p>
+      <span class="feature-badge badge-live">● Available Now</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="pad" id="how">
+  <div class="fade">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">Up and running <em>in 24 hours</em></h2>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Tell Us About Your Restaurant</div>
+      <p class="step-desc">Share your menu, hours, location, and reservation rules. We customize the AI to sound exactly like your brand.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">We Set Up Your AI</div>
+      <p class="step-desc">We connect your phone number, WhatsApp, and email to the AI system. No technical work needed on your end.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">AI Goes Live</div>
+      <p class="step-desc">Within 24 hours your AI is live and answering customers. You get a dashboard to monitor everything in real time.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-title">You Focus On Cooking</div>
+      <p class="step-desc">Let the AI handle the phones and messages. You focus on what you do best — running a great restaurant.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="pad" id="demo">
+  <div class="fade">
+    <div class="section-label">Live Demo</div>
+    <h2 class="section-title">Hear it <em>for yourself</em></h2>
+    <p style="color:var(--muted);">Call our live AI agent for Tolo Kabab House, Houston. It's real — ask it anything.</p>
+  </div>
+  <div class="demo-container">
+    <div class="demo-phone">
+      <div class="demo-phone-num">(832) 430-1032</div>
+      <div class="demo-phone-sub">Call our live AI agent right now</div>
+      <a href="tel:+18324301032" class="demo-call-btn">📞 Call Now →</a>
+      <div class="demo-meta">⚡ Real AI · Responses generated live · No personal data stored</div>
+      <div class="demo-tags">
+        <span class="demo-tag">📍 Tolo Kabab House, Houston TX</span>
+        <span class="demo-tag">🎙 Powered by OpenAI Realtime API</span>
+        <span class="demo-tag">🌍 English · Spanish · Dari · Pashto</span>
+      </div>
+    </div>
+    <div class="demo-chat">
+      <div class="demo-chat-header">
+        <div class="chat-avatar">🤖</div>
+        <div>
+          <div class="chat-name">Tolo Kabab House AI</div>
+          <div class="chat-status">Online — Powered by OpenAI</div>
+        </div>
+      </div>
+      <div class="demo-chat-body" id="demoChatBody"></div>
+      <div class="demo-chat-input">
+        <input type="text" id="demoChatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendDemoMsg()"/>
+        <button onclick="sendDemoMsg()">Send →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING / INVESTMENT -->
+<section class="pad" id="pricing">
+  <div class="fade">
+    <div class="section-label">Investment</div>
+    <h2 class="section-title">Built around <em>your business</em></h2>
+    <p style="color:var(--muted);">Every restaurant is different. We build a custom AI solution around your needs and price it accordingly — no surprise fees, no one-size-fits-all plans.</p>
+  </div>
+  <div class="investment-grid">
+    <div class="investment-card">
+      <div class="investment-name">Setup & Onboarding</div>
+      <div class="investment-tagline">One-time investment</div>
+      <p class="investment-desc">We configure your AI, train it on your menu, hours and brand — and have it live within 24 hours.</p>
+      <ul class="investment-features">
+        <li>Custom AI voice & personality</li>
+        <li>Menu & hours integration</li>
+        <li>Phone number setup</li>
+        <li>WhatsApp & email config</li>
+        <li>Full testing before go-live</li>
+      </ul>
+      <a href="/cdn-cgi/l/email-protection#8de3e2e0ece3ece5e0ece9f7ece4bebecdeae0ece4e1a3eee2e0" class="btn-outline" style="width:100%;text-align:center;">Get a Quote →</a>
+    </div>
+    <div class="investment-card featured">
+      <div class="investment-badge">Most Popular</div>
+      <div class="investment-name">Monthly Retainer</div>
+      <div class="investment-tagline">Custom monthly plan</div>
+      <p class="investment-desc">Ongoing AI management, monitoring, updates and support — so your AI stays sharp and your customers stay happy.</p>
+      <ul class="investment-features">
+        <li>Unlimited AI calls & messages</li>
+        <li>WhatsApp + email automation</li>
+        <li>Reservations dashboard</li>
+        <li>Monthly performance reports</li>
+        <li>Priority support</li>
+        <li>Free updates & improvements</li>
+      </ul>
+      <a href="/cdn-cgi/l/email-protection#c0aeafada1aea1a8ada1a4baa1a9f3f380a7ada1a9aceea3afad" class="btn-gold" style="width:100%;text-align:center;">Book a Free Call →</a>
+    </div>
+    <div class="investment-card">
+      <div class="investment-name">Multi-Location</div>
+      <div class="investment-tagline">Enterprise pricing</div>
+      <p class="investment-desc">Running a chain or restaurant group? We build a unified AI system across all your locations with centralized reporting.</p>
+      <ul class="investment-features">
+        <li>Multiple locations, one dashboard</li>
+        <li>Custom AI per location</li>
+        <li>Multi-language per market</li>
+        <li>Dedicated account manager</li>
+        <li>SLA & uptime guarantee</li>
+        <li>Custom integrations (POS, CRM)</li>
+      </ul>
+      <a href="/cdn-cgi/l/email-protection#452b2a28242b242d2824213f242c7676052228242c296b262a28" class="btn-outline" style="width:100%;text-align:center;">Contact Us →</a>
+    </div>
+  </div>
+  <div class="investment-note">
+    <p>💬 <strong>Not sure what you need?</strong> Book a free 15-minute call. We'll listen to your situation and tell you honestly what makes sense — no sales pressure.</p>
+    <a href="/cdn-cgi/l/email-protection#e38d8c8e828d828b8e828799828ad0d0a3848e828a8fcd808c8e" class="btn-gold">Schedule Free Consultation →</a>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="section-label" style="text-align:center;">Get Started</div>
+  <h2 class="section-title" style="text-align:center;max-width:600px;margin:0 auto 1.5rem;">Ready to never miss a call <em>again?</em></h2>
+  <p style="text-align:center;color:var(--muted);margin-bottom:2.5rem;">Join the waitlist. Early access restaurants get 3 months free.</p>
+  <div style="text-align:center;">
+    <a href="/cdn-cgi/l/email-protection#5c3233313d323d34313d38263d356f6f1c3b313d3530723f3331" class="btn-gold" style="font-size:1.05rem;padding:1rem 2.5rem;">Get Early Access — It's Free →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">🎙 TalkServe AI</div>
+    <p class="footer-desc">Intelligent AI receptionists and chatbots for restaurants and small businesses. Available 24/7. Setup in under a day.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Services</h4>
+    <a href="#features">AI Phone Receptionist</a>
+    <a href="#features">WhatsApp Chatbot</a>
+    <a href="#features">Email Auto-Reply</a>
+    <a href="#features">Analytics Dashboard</a>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <a href="https://nomanahmadzai.netlify.app">Our Team</a>
+    <a href="#pricing">Pricing</a>
+    <a href="/cdn-cgi/l/email-protection#b3dddcded2ddd2dbded2d7c9d2da8080f3d4ded2dadf9dd0dcde">Contact Us</a>
+    <a href="#">Privacy Policy</a>
+  </div>
+  <div class="footer-col">
+    <h4>Contact</h4>
+    <a href="/cdn-cgi/l/email-protection#d6beb3babab996a2b7babda5b3a4a0b3b7bff8b5b9bb"><span class="__cf_email__" data-cfemail="157d7079797a556174797e6670676370747c3b767a78">[email&#160;protected]</span></a>
+    <a href="tel:+18008255378">+1 (800) 825-5378</a>
+    <a href="/cdn-cgi/l/email-protection#1779787a7679767f7a76736d767e242457707a767e7b3974787a"><span class="__cf_email__" data-cfemail="1a7475777b747b72777b7e607b7329295a7d777b737634797577">[email&#160;protected]</span></a>
+    <a href="tel:+34691582624">+34 691 582 624</a>
+    <a href="https://linkedin.com/in/noman-ahmadzai-798744204">LinkedIn</a>
+    <a href="#">Twitter / X</a>
+  </div>
+</footer>
+<div class="footer-bottom">
+  © 2026 TalkServe AI. All rights reserved. Built with ❤️ for the hospitality industry.<br/>
+  Built by <a href="https://nomanahmadzai.netlify.app" style="color:var(--gold);text-decoration:none;">Noman Ahmadzai</a> · Madrid, Spain
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Time-aware greeting
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12) return "Good morning";
+  if (h >= 12 && h < 17) return "Good afternoon";
+  if (h >= 17 && h < 21) return "Good evening";
+  return "Good night";
+}
+
+const chatHistory = [];
+
+const SYSTEM_PROMPT = `You are the AI assistant for Tolo Kabab House, a popular Afghan restaurant in Houston, TX. You are warm, friendly, and professional — like a real human receptionist. Always respond naturally and conversationally.
+
+RESTAURANT INFO:
+- Name: Tolo Kabab House
+- Location: Houston, TX
+- Phone: (832) 430-1032
+- Cuisine: Afghan / Middle Eastern, 100% Halal certified
+
+OPENING HOURS:
+- Monday: 11:00 AM – 9:30 PM
+- Tuesday–Thursday: 11:30 AM – 9:30 PM
+- Friday & Saturday: 11:30 AM – 10:00 PM
+- Sunday: 11:00 AM – 10:00 PM
+
+POPULAR DISHES:
+- Quabili Palau (signature lamb & rice — must try!)
+- Lamb Kabab (tender marinated lamb, grilled perfectly)
+- Chicken Tikka (juicy spiced chicken kabab)
+- Mantu (Afghan dumplings with meat and yogurt sauce)
+- Bolani (stuffed flatbread, vegetarian option)
+- Shorwa (traditional Afghan soup)
+- Fresh Naan (baked in-house daily)
+- Firnee (Afghan rice pudding dessert)
+- Sheer Yakh (Afghan ice cream)
+
+SPECIAL INFO:
+- 100% Halal certified
+- Family-friendly atmosphere
+- Reservations accepted, walk-ins welcome
+- Parties of 6+ should book in advance
+- Private dining available for events
+- Parking available on-site
+- Languages: English, Dari, Pashto, Spanish, Arabic
+
+PERSONALITY RULES:
+- Be warm, natural and human — never robotic
+- Use emojis naturally but sparingly
+- If someone asks "how are you" or greets you, respond warmly and naturally
+- Recommend dishes enthusiastically based on what they say they like
+- For reservations collect: name, date, time, party size
+- Always offer further help after answering`;
+
+function addMessage(text, isUser) {
+  const body = document.getElementById('demoChatBody');
+  const div = document.createElement('div');
+  div.className = 'msg ' + (isUser ? 'msg-user' : 'msg-ai');
+  div.textContent = text;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+}
+
+function showTyping() {
+  const body = document.getElementById('demoChatBody');
+  const div = document.createElement('div');
+  div.className = 'msg msg-ai typing';
+  div.id = 'typingIndicator';
+  div.innerHTML = '<span></span><span></span><span></span>';
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById('typingIndicator');
+  if (t) t.remove();
+}
+
+async function callAI(userMessage) {
+  chatHistory.push({ role: 'user', content: userMessage });
+  try {
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: chatHistory })
+    });
+    const data = await res.json();
+    const reply = data.reply || "Could you repeat that? 😊";
+    chatHistory.push({ role: 'assistant', content: reply });
+    return reply;
+  } catch (e) {
+    return "Sorry, I'm having a moment! Please call us at (832) 430-1032 📞";
+  }
+}
+
+async function sendDemoMsg() {
+  const input = document.getElementById('demoChatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  input.disabled = true;
+  addMessage(msg, true);
+  showTyping();
+  const reply = await callAI(msg);
+  hideTyping();
+  addMessage(reply, false);
+  input.disabled = false;
+  input.focus();
+}
+
+// Time-aware greeting on load
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    showTyping();
+    setTimeout(function() {
+      hideTyping();
+      var welcome = getGreeting() + "! 👋 Welcome to Tolo Kabab House. I'm your AI assistant — ask me about our menu, hours, reservations, or anything else. How can I help you today?";
+      addMessage(welcome, false);
+      chatHistory.push({ role: 'assistant', content: welcome });
+    }, 900);
+  }, 400);
+});
+</script>
+</body>
+</html>
