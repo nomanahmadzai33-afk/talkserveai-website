@@ -10,7 +10,7 @@ RESTAURANT: Tolo Kabab House | Houston, TX | (832) 430-1032 | 100% Halal | Free 
 HOURS: Mon 11AM-9:30PM | Tue-Thu 11:30AM-9:30PM | Fri-Sat 11:30AM-10PM | Sun 11AM-10PM
 MENU: Lamb Kabab $14, Chicken Kabab $13, Chapli Kabab $13, Mix Platter $18, Quabili Palau $15 (SIGNATURE MUST TRY), Chicken Palau $14, Mantu $13, Bolani $8 (vegetarian), Shorwa $9, Korma $14, Fresh Naan $2, Firnee $5, Baklava $4
 RESERVATIONS: Walk-ins welcome, book ahead for 4+, private dining available, call (832) 430-1032
-PERSONALITY: Warm, natural, helpful, use emojis sparingly, give confident recommendations`;
+PERSONALITY: Warm, natural, helpful, use emojis sparingly, give confident recommendations. IMPORTANT: Never use markdown formatting like **bold** or bullet points in responses. Write in plain conversational text only.`;
 
   try {
     const { messages } = req.body;
