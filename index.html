@@ -286,14 +286,10 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
 
 <!-- TRUSTED -->
 <div class="trusted">
-  <p>Trusted by restaurants in Houston</p>
+  <p>Currently live & serving real customers</p>
   <div class="trusted-logos">
-    <span class="trusted-logo">Tolo Kabab House</span>
-    <span class="trusted-logo">Bella's Kitchen</span>
-    <span class="trusted-logo">The Grand Grill</span>
-    <span class="trusted-logo">Spice Route</span>
-    <span class="trusted-logo">Harbor Bites</span>
-    <span class="trusted-logo">Urban Eats Co.</span>
+    <span class="trusted-logo">🟢 Tolo Kabab House · Houston, TX</span>
+    <span class="trusted-logo">🚀 Early Access Now Open</span>
   </div>
 </div>
 
@@ -522,10 +518,10 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
   </div>
   <div class="footer-col">
     <h4>Company</h4>
-    <a href="https://www.linkedin.com/in/noman-ahmadzai-798744204/">Our Team</a>
+    <a href="https://www.linkedin.com/in/noman-ahmadzai-798744204/" target="_blank">About the Founder</a>
     <a href="#pricing">Pricing</a>
     <a href="mailto:talkserveai@gmail.com">Contact Us</a>
-    <a href="mailto:talkserveai@gmail.com?subject=Privacy Policy Request">Privacy Policy</a>
+    <a href="#" onclick="document.getElementById('privacyModal').style.display='flex';return false;">Privacy Policy</a>
   </div>
   <div class="footer-col">
     <h4>Contact</h4>
@@ -663,5 +659,22 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 400);
 });
 </script>
+
+<div id="privacyModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;padding:2rem;">
+  <div style="background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:20px;max-width:640px;width:100%;max-height:80vh;overflow-y:auto;padding:2.5rem;position:relative;">
+    <button onclick="document.getElementById('privacyModal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">&#x2715;</button>
+    <h2 style="font-family:'Playfair Display',serif;color:#c9a84c;margin-bottom:1.5rem;">Privacy Policy</h2>
+    <p style="color:#888;font-size:0.8rem;margin-bottom:1.5rem;">Last updated: April 2026</p>
+    <div style="color:#aaa;font-size:0.875rem;line-height:1.8;display:flex;flex-direction:column;gap:1rem;">
+      <p><strong style="color:#f0f0f0;">1. Information We Collect</strong><br/>When you contact us or use our demo, we may collect your name, email address, phone number, and restaurant details you voluntarily provide.</p>
+      <p><strong style="color:#f0f0f0;">2. How We Use Your Information</strong><br/>We use your information solely to respond to your inquiries, provide our AI receptionist services, and improve our product. We do not sell your data to third parties.</p>
+      <p><strong style="color:#f0f0f0;">3. Data Storage</strong><br/>Demo chat conversations are not stored. Contact form submissions are stored securely and only accessible to the TalkServe AI team.</p>
+      <p><strong style="color:#f0f0f0;">4. Third-Party Services</strong><br/>Our service uses OpenAI (AI processing) and Twilio (phone calls). We do not share personal data beyond what is necessary to operate the service.</p>
+      <p><strong style="color:#f0f0f0;">5. Cookies</strong><br/>We use minimal cookies for basic functionality only. No tracking or advertising cookies.</p>
+      <p><strong style="color:#f0f0f0;">6. Your Rights</strong><br/>You may request access, correction, or deletion of your data at any time by emailing talkserveai@gmail.com.</p>
+      <p><strong style="color:#f0f0f0;">7. Contact</strong><br/>Email: <a href="mailto:talkserveai@gmail.com" style="color:#c9a84c;">talkserveai@gmail.com</a></p>
+    </div>
+  </div>
+</div>
 </body>
 </html>
