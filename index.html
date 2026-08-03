@@ -136,13 +136,29 @@ h1 em{color:var(--gold);font-style:italic;}
 .step-title{font-weight:700;margin-bottom:0.5rem;}
 .step-desc{font-size:0.875rem;color:var(--muted);line-height:1.6;}
 
+/* CASE STUDIES */
+#case-studies{background:linear-gradient(180deg,rgba(255,255,255,0.02),var(--bg));}
+.case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;max-width:1000px;margin:0 auto;}
+.case-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;transition:all 0.2s;position:relative;overflow:hidden;}
+.case-card:hover{border-color:rgba(201,168,76,0.35);transform:translateY(-3px);}
+.case-flag{font-size:2rem;margin-bottom:1rem;}
+.case-name{font-weight:700;font-size:1.2rem;margin-bottom:0.15rem;}
+.case-loc{font-size:0.8rem;color:var(--gold);font-weight:500;margin-bottom:1.25rem;}
+.case-desc{font-size:0.875rem;color:var(--muted);line-height:1.7;margin-bottom:1.25rem;}
+.case-facts{list-style:none;display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem;}
+.case-facts li{font-size:0.825rem;color:var(--muted);display:flex;align-items:center;gap:0.5rem;}
+.case-facts li::before{content:'●';color:var(--green);font-size:0.6rem;}
+.case-call{display:inline-block;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);color:var(--green);padding:0.5rem 1.1rem;border-radius:20px;font-size:0.8rem;font-weight:600;text-decoration:none;}
+
 /* DEMO SECTION */
 #demo{background:linear-gradient(180deg,var(--bg),rgba(20,12,0,0.6));}
 .demo-container{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;max-width:1000px;margin:0 auto;}
 @media(max-width:768px){
   .demo-container{grid-template-columns:1fr;gap:2rem;}
 }
+.demo-phones{display:flex;flex-direction:column;gap:1.25rem;}
 .demo-phone{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:2rem;text-align:center;}
+.demo-phone-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin-bottom:0.75rem;font-weight:600;}
 .demo-phone-num{font-size:2rem;font-weight:700;color:var(--gold);margin-bottom:0.5rem;}
 .demo-phone-sub{font-size:0.875rem;color:var(--muted);margin-bottom:2rem;}
 .demo-call-btn{display:inline-block;background:var(--green);color:#000;padding:1rem 2.5rem;border-radius:50px;font-weight:700;font-size:1rem;text-decoration:none;transition:all 0.2s;}
@@ -220,14 +236,6 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
 .typing span:nth-child(3){animation-delay:0.4s;}
 @keyframes typing-dot{0%,60%,100%{transform:translateY(0);opacity:0.4;}30%{transform:translateY(-4px);opacity:1;}}
 </style>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-PLACEHOLDER');
-</script>
 </head>
 <body>
 
@@ -237,12 +245,12 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
   <ul class="nav-links" id="navLinks">
     <li><a href="#features">Features</a></li>
     <li><a href="#how">How It Works</a></li>
+    <li><a href="#case-studies">Live Restaurants</a></li>
     <li><a href="#demo">Live Demo</a></li>
-    <li><a href="#pricing">Pricing</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="#" onclick="openContactModal('Get Early Access');return false;" class="nav-cta">Get Early Access</a></li>
   </ul>
-  <span class="nav-badge">Live in Houston, TX</span>
+  <span class="nav-badge">Live in Houston &amp; Madrid</span>
   <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
     <span></span><span></span><span></span>
   </div>
@@ -324,6 +332,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
   <p>Currently live & serving real customers</p>
   <div class="trusted-logos">
     <span class="trusted-logo">🟢 Tolo Kabab House · Houston, TX</span>
+    <span class="trusted-logo">🟢 Du Liban · Madrid, Spain</span>
     <span class="trusted-logo">🚀 Early Access Now Open</span>
   </div>
 </div>
@@ -388,7 +397,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
       <div class="feature-icon">📊</div>
       <div class="feature-name">Reservations Dashboard</div>
       <p class="feature-desc">See all reservations, leads, and customer interactions in one place. Export data, track patterns, and never lose a booking again.</p>
-      <a href="#" onclick="openContactModal('Join Waitlist');return false;" class="feature-badge badge-soon" style="cursor:pointer;text-decoration:none;">&#128276; Join Waitlist</a>
+      <span class="feature-badge badge-live">● Live Now</span>
     </div>
     <div class="feature-card">
       <div class="feature-icon">🌍</div>
@@ -435,21 +444,62 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
   </div>
 </section>
 
+<!-- CASE STUDIES -->
+<section class="pad" id="case-studies">
+  <div class="fade">
+    <div class="section-label">Live Restaurants</div>
+    <h2 class="section-title">Two continents. <em>Zero missed calls.</em></h2>
+    <p style="color:var(--muted);">TalkServe AI isn't a concept — it's already answering real calls for real restaurants, on two different continents.</p>
+  </div>
+  <div class="case-grid">
+    <div class="case-card">
+      <div class="case-flag">🇺🇸</div>
+      <div class="case-name">Tolo Kabab House</div>
+      <div class="case-loc">Houston, Texas · Afghan cuisine</div>
+      <p class="case-desc">Our original deployment. The AI voice receptionist answers every call, takes reservations, and speaks four languages — live since early 2026.</p>
+      <ul class="case-facts">
+        <li>AI voice receptionist — live</li>
+        <li>English · Spanish · Dari · Pashto</li>
+        <li>100% Halal menu knowledge built in</li>
+      </ul>
+      <a href="tel:+18324301032" class="case-call">📞 Call (832) 430-1032</a>
+    </div>
+    <div class="case-card">
+      <div class="case-flag">🇪🇸</div>
+      <div class="case-name">Du Liban</div>
+      <div class="case-loc">Alcobendas, La Moraleja, Madrid · Lebanese cuisine</div>
+      <p class="case-desc">Our Madrid deployment. A full AI receptionist stack — voice, reservations, and an operations dashboard — running for a Lebanese restaurant in La Moraleja.</p>
+      <ul class="case-facts">
+        <li>AI voice receptionist — live</li>
+        <li>Spanish · English</li>
+        <li>Live reservations dashboard for staff</li>
+      </ul>
+      <a href="tel:+34917544838" class="case-call">📞 Call +34 91 754 48 38</a>
+    </div>
+  </div>
+</section>
+
 <!-- DEMO -->
 <section class="pad" id="demo">
   <div class="fade">
     <div class="section-label">Live Demo</div>
     <h2 class="section-title">Hear it <em>for yourself</em></h2>
-    <p style="color:var(--muted);">Call our live AI agent for Tolo Kabab House, Houston. It's real — ask it anything.</p>
+    <p style="color:var(--muted);">Call one of our live AI agents below. It's real — ask it anything.</p>
   </div>
   <div class="demo-container">
-    <div class="demo-phone">
-      <div class="demo-phone-num">(832) 430-1032</div>
-      <div class="demo-phone-sub">Call our live AI agent right now</div>
-      <a href="tel:+18324301032" class="demo-call-btn">📞 Call Now →</a>
-      <div class="demo-meta">⚡ Real AI · Responses generated live · No personal data stored</div>
+    <div class="demo-phones">
+      <div class="demo-phone">
+        <div class="demo-phone-label">🇺🇸 Tolo Kabab House · Houston</div>
+        <div class="demo-phone-num">(832) 430-1032</div>
+        <a href="tel:+18324301032" class="demo-call-btn">📞 Call Now →</a>
+      </div>
+      <div class="demo-phone">
+        <div class="demo-phone-label">🇪🇸 Du Liban · Madrid</div>
+        <div class="demo-phone-num">+34 91 754 48 38</div>
+        <a href="tel:+34917544838" class="demo-call-btn">📞 Call Now →</a>
+      </div>
+      <div class="demo-meta" style="text-align:center;">⚡ Real AI · Responses generated live · No personal data stored</div>
       <div class="demo-tags">
-        <span class="demo-tag">📍 Tolo Kabab House, Houston TX</span>
         <span class="demo-tag">🎙 Powered by OpenAI Realtime API</span>
         <span class="demo-tag">🌍 English · Spanish · Dari · Pashto</span>
       </div>
@@ -472,7 +522,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
 </section>
 
 <!-- PRICING / INVESTMENT -->
-<section class="pad" id="pricing">
+<section class="pad" id="pricing" style="display:none;">
   <div class="fade">
     <div class="section-label">Investment</div>
     <h2 class="section-title">Built around <em>your business</em></h2>
@@ -544,8 +594,8 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
         </div>
       </div>
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:1rem;">
-        <div style="font-size:3.5rem;font-weight:700;color:var(--gold);">96%</div>
-        <div style="font-size:0.9rem;color:var(--muted);">Guest satisfaction rate across all AI-handled calls</div>
+        <div style="font-size:3.5rem;font-weight:700;color:var(--gold);">2</div>
+        <div style="font-size:0.9rem;color:var(--muted);">Restaurants live on two continents — Houston, TX &amp; Madrid, Spain</div>
       </div>
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:1rem;">
         <div style="font-size:3.5rem;font-weight:700;color:var(--gold);">0</div>
@@ -553,20 +603,20 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
       </div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:1.5rem;">
+      <div style="background:var(--surface);border:1px solid rgba(201,168,76,0.3);border-radius:20px;padding:2rem;">
+        <div style="color:var(--gold);font-size:1.2rem;margin-bottom:1rem;">🇪🇸 Live Case Study</div>
+        <p style="color:var(--text);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem;">Du Liban, a Lebanese restaurant in La Moraleja, Madrid, runs a full AI receptionist stack handling real reservation calls, with a live operations dashboard for staff.</p>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <div style="width:40px;height:40px;background:linear-gradient(135deg,#dc2626,#991b1b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;">D</div>
+          <div><div style="font-weight:600;font-size:0.875rem;">Du Liban</div><div style="font-size:0.75rem;color:var(--muted);">Alcobendas &middot; Madrid, Spain</div></div>
+        </div>
+      </div>
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;">
         <div style="color:var(--gold);font-size:1.2rem;margin-bottom:1rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
         <p style="color:var(--text);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem;font-style:italic;">"Before TalkServe AI, we were losing reservations every night during dinner service. Now every call is answered instantly. Our bookings went up 40% in the first month."</p>
         <div style="display:flex;align-items:center;gap:0.75rem;">
           <div style="width:40px;height:40px;background:linear-gradient(135deg,#6366f1,#4338ca);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;">M</div>
           <div><div style="font-weight:600;font-size:0.875rem;">Miguel R.</div><div style="font-size:0.75rem;color:var(--muted);">Restaurant Owner &middot; Madrid</div></div>
-        </div>
-      </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;">
-        <div style="color:var(--gold);font-size:1.2rem;margin-bottom:1rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p style="color:var(--text);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem;font-style:italic;">"The AI speaks perfect Spanish and handles all our reservation calls. Our staff can finally focus on guests inside instead of being stuck on the phone."</p>
-        <div style="display:flex;align-items:center;gap:0.75rem;">
-          <div style="width:40px;height:40px;background:linear-gradient(135deg,#f59e0b,#b45309);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;">S</div>
-          <div><div style="font-weight:600;font-size:0.875rem;">Sofia M.</div><div style="font-size:0.75rem;color:var(--muted);">Operations Manager &middot; Barcelona</div></div>
         </div>
       </div>
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;">
@@ -610,7 +660,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
         <div style="font-size:2rem;margin-bottom:0.75rem;">&#128231;</div>
         <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.25rem;">Gmail</div>
         <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.75rem;">Email Auto-Reply</div>
-        <span style="background:rgba(39,174,96,0.15);color:#27ae60;border:1px solid #27ae60;padding:0.15rem 0.5rem;border-radius:20px;font-size:0.7rem;font-weight:600;">● Live</span>
+        <span style="background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.25);padding:0.15rem 0.5rem;border-radius:20px;font-size:0.7rem;font-weight:600;">&#9679; Live</span>
       </div>
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;">
         <div style="font-size:2rem;margin-bottom:0.75rem;">&#128197;</div>
@@ -618,11 +668,11 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
         <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.75rem;">Reservations</div>
         <span style="background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.25);padding:0.15rem 0.5rem;border-radius:20px;font-size:0.7rem;font-weight:600;">&#9679; Live</span>
       </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;">
+      <div style="background:var(--surface);border:1px solid rgba(34,197,94,0.3);border-radius:16px;padding:1.5rem;text-align:center;">
         <div style="font-size:2rem;margin-bottom:0.75rem;">&#127869;</div>
-        <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.25rem;">OpenTable</div>
+        <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.25rem;">SevenRooms</div>
         <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.75rem;">Reservations</div>
-        <span style="background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border);padding:0.15rem 0.5rem;border-radius:20px;font-size:0.7rem;font-weight:600;">Soon</span>
+        <span style="background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.25);padding:0.15rem 0.5rem;border-radius:20px;font-size:0.7rem;font-weight:600;">&#9679; Live</span>
       </div>
     </div>
   </div>
@@ -637,7 +687,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
       <div style="background:#1a0a0a;border:1px solid rgba(255,80,80,0.2);border-radius:20px;padding:2rem;">
         <div style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;color:#ff6b6b;margin-bottom:1rem;">Human Receptionist</div>
-        <div style="font-size:2.5rem;font-weight:700;color:#ff6b6b;margin-bottom:0.5rem;">&#8364;2,500<span style="font-size:1rem;font-weight:400;">/mo</span></div>
+        <div style="display:none;font-size:2.5rem;font-weight:700;color:#ff6b6b;margin-bottom:0.5rem;">&#8364;2,500<span style="font-size:1rem;font-weight:400;">/mo</span></div>
         <ul style="list-style:none;margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem;text-align:left;">
           <li style="font-size:0.85rem;color:var(--muted);display:flex;align-items:center;gap:0.5rem;"><span style="color:#ff6b6b;">&#10005;</span> Only works 8 hours/day</li>
           <li style="font-size:0.85rem;color:var(--muted);display:flex;align-items:center;gap:0.5rem;"><span style="color:#ff6b6b;">&#10005;</span> Sick days &amp; holidays</li>
@@ -648,7 +698,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
       </div>
       <div style="background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.4);border-radius:20px;padding:2rem;">
         <div style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin-bottom:1rem;">TalkServe AI</div>
-        <div style="font-size:2.5rem;font-weight:700;color:var(--gold);margin-bottom:0.5rem;">&#8364;300<span style="font-size:1rem;font-weight:400;">/mo</span></div>
+        <div style="display:none;font-size:2.5rem;font-weight:700;color:var(--gold);margin-bottom:0.5rem;">&#8364;300<span style="font-size:1rem;font-weight:400;">/mo</span></div>
         <ul style="list-style:none;margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem;text-align:left;">
           <li style="font-size:0.85rem;color:var(--muted);display:flex;align-items:center;gap:0.5rem;"><span style="color:var(--gold);">&#10003;</span> 24 hours, 7 days a week</li>
           <li style="font-size:0.85rem;color:var(--muted);display:flex;align-items:center;gap:0.5rem;"><span style="color:var(--gold);">&#10003;</span> Never sick, never tired</li>
@@ -658,7 +708,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
         </ul>
       </div>
     </div>
-    <div style="margin-top:2rem;padding:1.5rem;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:16px;">
+    <div style="display:none;margin-top:2rem;padding:1.5rem;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:16px;">
       <p style="color:var(--text);font-size:1rem;">&#128176; <strong>Save over &#8364;2,200 every month</strong> &mdash; that&rsquo;s &#8364;26,400 per year back in your pocket.</p>
     </div>
   </div>
@@ -724,7 +774,6 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
   <div class="footer-col">
     <h4>Company</h4>
     <a href="https://www.linkedin.com/in/noman-ahmadzai-798744204/" target="_blank">About the Founder</a>
-    <a href="#pricing">Pricing</a>
     <a href="mailto:talkserveai@gmail.com">Contact Us</a>
     <a href="#" onclick="document.getElementById('privacyModal').style.display='flex';return false;">Privacy Policy</a>
   </div>
@@ -733,7 +782,6 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
     <a href="mailto:talkserveai@gmail.com">talkserveai@gmail.com</a>
     <a href="tel:+34691582624">+34 691 582 624</a>
     <a href="https://www.linkedin.com/in/noman-ahmadzai-798744204/">LinkedIn</a>
-    
   </div>
 </footer>
 <div class="footer-bottom">
@@ -742,67 +790,6 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;display:grid;grid-te
 </div>
 
 <script>
-
-
-function openContactModal(source) {
-  document.getElementById('contactModal').classList.add('open');
-  document.getElementById('formSource').value = source || 'Website';
-  document.getElementById('modalTitle').textContent = source || 'Book a Free Call';
-  document.getElementById('contactFormWrapper').style.display = 'block';
-  document.getElementById('formSuccess').style.display = 'none';
-  document.body.style.overflow = 'hidden';
-}
-
-function closeContactModal() {
-  document.getElementById('contactModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('contactModal').addEventListener('click', function(e) {
-    if (e.target === this) closeContactModal();
-  });
-
-  document.getElementById('contactForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = this.querySelector('.form-submit');
-  const email = this.querySelector('input[type="email"]').value;
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
-  try {
-    const res = await fetch('https://formspree.io/f/xwvalojd', {
-      method: 'POST',
-      body: new FormData(this),
-      headers: { 'Accept': 'application/json' }
-    });
-    if (res.ok) {
-      document.getElementById('contactFormWrapper').style.display = 'none';
-      document.getElementById('formSuccess').style.display = 'block';
-      document.getElementById('successEmail').textContent = email;
-    } else {
-      btn.textContent = 'Error — try again';
-      btn.disabled = false;
-    }
-  } catch(err) {
-    btn.textContent = 'Error — try again';
-    btn.disabled = false;
-  }
-  });
-}); // end DOMContentLoaded
-
-function toggleFaq(btn) {
-  const answer = btn.nextElementSibling;
-  const icon = btn.querySelector('span');
-  if (answer.style.display === 'none') {
-    answer.style.display = 'block';
-    icon.textContent = '−';
-  } else {
-    answer.style.display = 'none';
-    icon.textContent = '+';
-  }
-}
-
-// Time-aware greeting
 function getGreeting() {
   const h = new Date().getHours();
   if (h >= 5 && h < 12) return "Good morning";
@@ -812,48 +799,6 @@ function getGreeting() {
 }
 
 const chatHistory = [];
-
-const SYSTEM_PROMPT = `You are the AI assistant for Tolo Kabab House, a popular Afghan restaurant in Houston, TX. You are warm, friendly, and professional — like a real human receptionist. Always respond naturally and conversationally.
-
-RESTAURANT INFO:
-- Name: Tolo Kabab House
-- Location: Houston, TX
-- Phone: (832) 430-1032
-- Cuisine: Afghan / Middle Eastern, 100% Halal certified
-
-OPENING HOURS:
-- Monday: 11:00 AM – 9:30 PM
-- Tuesday–Thursday: 11:30 AM – 9:30 PM
-- Friday & Saturday: 11:30 AM – 10:00 PM
-- Sunday: 11:00 AM – 10:00 PM
-
-POPULAR DISHES:
-- Quabili Palau (signature lamb & rice — must try!)
-- Lamb Kabab (tender marinated lamb, grilled perfectly)
-- Chicken Tikka (juicy spiced chicken kabab)
-- Mantu (Afghan dumplings with meat and yogurt sauce)
-- Bolani (stuffed flatbread, vegetarian option)
-- Shorwa (traditional Afghan soup)
-- Fresh Naan (baked in-house daily)
-- Firnee (Afghan rice pudding dessert)
-- Sheer Yakh (Afghan ice cream)
-
-SPECIAL INFO:
-- 100% Halal certified
-- Family-friendly atmosphere
-- Reservations accepted, walk-ins welcome
-- Parties of 6+ should book in advance
-- Private dining available for events
-- Parking available on-site
-- Languages: English, Dari, Pashto, Spanish, Arabic
-
-PERSONALITY RULES:
-- Be warm, natural and human — never robotic
-- Use emojis naturally but sparingly
-- If someone asks "how are you" or greets you, respond warmly and naturally
-- Recommend dishes enthusiastically based on what they say they like
-- For reservations collect: name, date, time, party size
-- Always offer further help after answering`;
 
 function addMessage(text, isUser) {
   const body = document.getElementById('demoChatBody');
@@ -911,8 +856,6 @@ async function sendDemoMsg() {
   input.focus();
 }
 
-
-
 function openContactModal(source) {
   document.getElementById('contactModal').classList.add('open');
   document.getElementById('formSource').value = source || 'Website';
@@ -927,38 +870,6 @@ function closeContactModal() {
   document.body.style.overflow = '';
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('contactModal').addEventListener('click', function(e) {
-    if (e.target === this) closeContactModal();
-  });
-
-  document.getElementById('contactForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = this.querySelector('.form-submit');
-  const email = this.querySelector('input[type="email"]').value;
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
-  try {
-    const res = await fetch('https://formspree.io/f/xwvalojd', {
-      method: 'POST',
-      body: new FormData(this),
-      headers: { 'Accept': 'application/json' }
-    });
-    if (res.ok) {
-      document.getElementById('contactFormWrapper').style.display = 'none';
-      document.getElementById('formSuccess').style.display = 'block';
-      document.getElementById('successEmail').textContent = email;
-    } else {
-      btn.textContent = 'Error — try again';
-      btn.disabled = false;
-    }
-  } catch(err) {
-    btn.textContent = 'Error — try again';
-    btn.disabled = false;
-  }
-  });
-}); // end DOMContentLoaded
-
 function toggleFaq(btn) {
   const answer = btn.nextElementSibling;
   const icon = btn.querySelector('span');
@@ -971,8 +882,37 @@ function toggleFaq(btn) {
   }
 }
 
-// Time-aware greeting on load
 document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('contactModal').addEventListener('click', function(e) {
+    if (e.target === this) closeContactModal();
+  });
+
+  document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.form-submit');
+    const email = this.querySelector('input[type="email"]').value;
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://formspree.io/f/xwvalojd', {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        document.getElementById('contactFormWrapper').style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+        document.getElementById('successEmail').textContent = email;
+      } else {
+        btn.textContent = 'Error — try again';
+        btn.disabled = false;
+      }
+    } catch(err) {
+      btn.textContent = 'Error — try again';
+      btn.disabled = false;
+    }
+  });
+
   setTimeout(function() {
     showTyping();
     setTimeout(function() {
