@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Our Story — TalkServe AI</title>
+<meta name="description" content="Why TalkServe AI exists, and who's building it — the story behind the AI receptionist for restaurants."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎙</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/site.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">🎙 TalkServe AI</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/about">Our Story</a></li>
+    <li><a href="/#features">Features</a></li>
+    <li><a href="/partners">Case Studies</a></li>
+    <li><a href="/integrations">Integrations</a></li>
+    <li><a href="/#demo">Live Demo</a></li>
+    <li><a href="#" onclick="openContactModal('Get Early Access');return false;" class="nav-cta">Get Early Access</a></li>
+  </ul>
+  <span class="nav-badge">Live in Houston &amp; Madrid</span>
+  <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<section class="subpage-hero">
+  <div class="section-label">Our Story</div>
+  <h2 class="section-title">Built by someone who's <em>worked the floor</em></h2>
+</section>
+
+<div class="story-wrap">
+  <p>TalkServe AI wasn't built in a boardroom. It was built by <strong>Noman Ahmadzai</strong>, a waiter working the floor at a restaurant in La Moraleja, Alcobendas, in Madrid.</p>
+
+  <p>Working service means watching the same problem happen night after night: the phone rings during the dinner rush, every hand is full, and nobody can get to it. The call goes to voicemail — or nowhere. That's a reservation gone, sometimes a regular who doesn't call back. It's not a hypothetical for Noman — it's what he sees from the floor, shift after shift.</p>
+
+  <p class="story-quote">"I wasn't trying to build a tech company. I was trying to fix the thing I watched happen at work every week."</p>
+
+  <p>So outside of shifts, nights and days off, Noman started building. Not a call center, not a script-reading bot — an AI receptionist that actually picks up, in the languages the restaurant's own customers speak, and hands off to a human the moment it matters. TalkServe AI grew out of that: a hands-on understanding of what a restaurant actually needs at the host stand and on the phone, not a generic enterprise pitch.</p>
+
+  <p>That's still how it's run today — directly, by someone who still clocks in for restaurant shifts and knows the difference between a feature that sounds good in a demo and one that actually holds up on a Friday night.</p>
+
+  <div class="story-facts">
+    <div>
+      <div class="story-fact-num">2</div>
+      <div class="story-fact-label">Restaurants live today — Houston, TX &amp; Madrid, Spain</div>
+    </div>
+    <div>
+      <div class="story-fact-num">7+</div>
+      <div class="story-fact-label">Languages the AI can handle</div>
+    </div>
+    <div>
+      <div class="story-fact-num">24h</div>
+      <div class="story-fact-label">Typical time to get a new restaurant live</div>
+    </div>
+  </div>
+
+  <p>If you run a restaurant and you've ever lost a booking to a phone nobody could answer, that's exactly who this was built for. <a href="#" onclick="openContactModal('Get Early Access');return false;" style="color:var(--gold);">Get in touch</a> and Noman will walk you through it himself.</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">🎙 TalkServe AI</div>
+    <p class="footer-desc">Intelligent AI receptionists and chatbots for restaurants and small businesses. Available 24/7. Setup in under a day.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Services</h4>
+    <a href="/#features">AI Phone Receptionist</a>
+    <a href="/#features">WhatsApp Chatbot</a>
+    <a href="/#features">Email Auto-Reply</a>
+    <a href="/integrations">Integrations</a>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <a href="/about">Our Story</a>
+    <a href="/partners">Case Studies</a>
+    <a href="/trust">Trust &amp; Privacy</a>
+    <a href="mailto:talkserveai@gmail.com">Contact Us</a>
+  </div>
+  <div class="footer-col">
+    <h4>Contact</h4>
+    <a href="mailto:talkserveai@gmail.com">talkserveai@gmail.com</a>
+    <a href="tel:+34691582624">+34 691 582 624</a>
+    <a href="https://www.linkedin.com/in/noman-ahmadzai-798744204/">LinkedIn</a>
+  </div>
+</footer>
+<div class="footer-bottom">
+  © 2026 TalkServe AI. All rights reserved. Built with ❤️ for the hospitality industry.<br/>
+  Built by <a href="https://noman-portfolio-rose.vercel.app" style="color:var(--gold);text-decoration:none;">Noman Ahmadzai</a> · Madrid, Spain
+</div>
+
+<!-- CONTACT FORM MODAL -->
+<div class="contact-modal" id="contactModal">
+  <div class="contact-modal-inner">
+    <button class="form-close" onclick="closeContactModal()">&#x2715;</button>
+    <div id="contactFormWrapper">
+      <h3 id="modalTitle">Book a Free Call</h3>
+      <p id="modalSubtitle">Tell us about your restaurant and we'll reach out within 24 hours to set up your AI receptionist.</p>
+      <form id="contactForm" action="https://formspree.io/f/xwvalojd" method="POST">
+        <input type="hidden" name="_subject" value="New TalkServe AI Lead!" />
+        <input type="hidden" name="source" id="formSource" value="Website" />
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Name *</label>
+            <input type="text" name="name" placeholder="John Smith" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" name="email" placeholder="john@restaurant.com" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" name="phone" placeholder="+34 600 000 000" />
+          </div>
+          <div class="form-group">
+            <label>Restaurant Name</label>
+            <input type="text" name="restaurant" placeholder="My Restaurant" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Number of Locations</label>
+          <select name="locations" style="background:#1a1a1a;color:var(--text);">
+            <option value="">Select...</option>
+            <option value="1">1 location</option>
+            <option value="2-5">2-5 locations</option>
+            <option value="6-10">6-10 locations</option>
+            <option value="10+">10+ locations</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>What do you need?</label>
+          <select name="service" style="background:#1a1a1a;color:var(--text);">
+            <option value="">Select...</option>
+            <option value="voice">AI Voice Receptionist (calls)</option>
+            <option value="whatsapp">WhatsApp Chatbot</option>
+            <option value="email">Email Auto-Reply</option>
+            <option value="all">All of the above</option>
+            <option value="unsure">Not sure yet</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message (optional)</label>
+          <textarea name="message" placeholder="Tell us anything else about your restaurant..."></textarea>
+        </div>
+        <input type="text" name="_gotcha" style="display:none" />
+        <button type="submit" class="form-submit">Send — We'll reply within 24 hours &#10140;</button>
+      </form>
+    </div>
+    <div class="form-success" id="formSuccess" style="display:none;">
+      <div class="success-icon">&#127881;</div>
+      <h4>Message sent successfully!</h4>
+      <p>We've received your details and will reach out to <strong id="successEmail"></strong> within 24 hours.</p>
+      <p style="margin-top:1rem;">In the meantime, call our live demo: <a href="tel:+18324301032" style="color:var(--gold);">(832) 430-1032</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+function openContactModal(source) {
+  document.getElementById('contactModal').classList.add('open');
+  document.getElementById('formSource').value = source || 'Website';
+  document.getElementById('modalTitle').textContent = source || 'Book a Free Call';
+  document.getElementById('contactFormWrapper').style.display = 'block';
+  document.getElementById('formSuccess').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+}
+function closeContactModal() {
+  document.getElementById('contactModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('contactModal').addEventListener('click', function(e) {
+    if (e.target === this) closeContactModal();
+  });
+  document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.form-submit');
+    const email = this.querySelector('input[type="email"]').value;
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://formspree.io/f/xwvalojd', {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        document.getElementById('contactFormWrapper').style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+        document.getElementById('successEmail').textContent = email;
+      } else {
+        btn.textContent = 'Error — try again';
+        btn.disabled = false;
+      }
+    } catch(err) {
+      btn.textContent = 'Error — try again';
+      btn.disabled = false;
+    }
+  });
+});
+</script>
+
+</body>
+</html>
