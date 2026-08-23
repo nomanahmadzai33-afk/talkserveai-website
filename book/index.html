@@ -17,6 +17,25 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/assets/site.css"/>
+<style>
+/* Step 3: real-time slot picker (live Google Calendar availability) */
+.slots-tz-note{color:var(--muted2);font-size:0.8rem;margin-bottom:1.25rem;}
+.slots-day-group{margin-bottom:1.5rem;}
+.slots-day-group:last-child{margin-bottom:0;}
+.slots-day-label{font-weight:600;color:var(--gold);font-size:0.9rem;margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.04em;}
+.slots-day-times{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:0.6rem;}
+.slot-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);padding:0.65rem 0.5rem;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.slot-btn:hover:not(:disabled){border-color:var(--gold);background:rgba(201,168,76,0.08);transform:translateY(-1px);}
+.slot-btn:disabled{opacity:0.45;cursor:default;}
+.slots-status{text-align:center;padding:2rem 0.5rem;color:var(--muted);font-size:0.9rem;}
+.slots-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;margin:0 auto 1rem;animation:slots-spin 0.8s linear infinite;}
+@keyframes slots-spin{to{transform:rotate(360deg);}}
+.slots-notice{background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.3);color:var(--gold-light);border-radius:10px;padding:0.75rem 1rem;font-size:0.85rem;margin-bottom:1.25rem;text-align:center;}
+.slots-notice.slots-notice-error{background:rgba(255,255,255,0.05);border-color:var(--border);color:var(--text);}
+.slots-retry-btn{background:transparent;border:1px solid var(--border);color:var(--text);padding:0.6rem 1.5rem;border-radius:10px;font-weight:600;font-size:0.85rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:0.75rem;}
+.slots-retry-btn:hover{border-color:var(--gold);color:var(--gold);}
+.confirm-ref{color:var(--muted2);font-size:0.78rem;margin-top:1.25rem !important;}
+</style>
 </head>
 <body>
 
@@ -74,24 +93,24 @@
         </div>
         <div class="form-group">
           <label data-i18n="lblEmail">Email Address *</label>
-          <input type="email" name="email" required data-i18n-ph="phEmail" />
+          <input type="email" name="email" id="fEmail" required data-i18n-ph="phEmail" />
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label data-i18n="lblPhone">Phone Number</label>
-          <input type="tel" name="phone" data-i18n-ph="phPhone" />
+          <label data-i18n="lblPhone">Phone Number *</label>
+          <input type="tel" name="phone" id="fPhone" required data-i18n-ph="phPhone" />
         </div>
         <div class="form-group">
-          <label data-i18n="lblRestaurant">Restaurant Name</label>
-          <input type="text" name="restaurant" data-i18n-ph="phRestaurant" />
+          <label data-i18n="lblRestaurant">Restaurant Name *</label>
+          <input type="text" name="restaurant" id="fRestaurant" required data-i18n-ph="phRestaurant" />
         </div>
       </div>
 
       <div class="form-group">
         <label data-i18n="lblLocations">Number of Locations</label>
-        <select name="locations" style="background:#1a1a1a;color:var(--text);">
+        <select name="locations" id="fLocations" style="background:#1a1a1a;color:var(--text);">
           <option value="" data-i18n="optSelect">Select...</option>
           <option value="1" data-i18n="opt1">1 location</option>
           <option value="2-5" data-i18n="opt2">2-5 locations</option>
@@ -102,7 +121,7 @@
 
       <div class="form-group">
         <label data-i18n="lblChallenge">What's your biggest challenge right now? *</label>
-        <textarea name="main_challenge" required data-i18n-ph="phChallenge"></textarea>
+        <textarea name="main_challenge" id="fChallenge" required data-i18n-ph="phChallenge"></textarea>
       </div>
 
       <input type="text" name="_gotcha" style="display:none" />
@@ -110,15 +129,27 @@
     </form>
   </div>
 
-  <!-- STEP 3: SUCCESS -->
+  <!-- STEP 3: REAL AVAILABILITY / SLOT PICKER -->
+  <div class="book-form-card" id="bookSlotsCard" style="display:none;">
+    <div class="book-form-head">
+      <h3 data-i18n="slotsTitle">Choose a time for your demo</h3>
+      <button type="button" class="lang-switch" id="slotsEditBtn" data-i18n="editInfo">← Edit info</button>
+    </div>
+    <p class="book-form-sub" data-i18n="slotsSub">Pick any open time below — these are real openings on our calendar.</p>
+    <div id="slotsBody"></div>
+  </div>
+
+  <!-- STEP 4: SUCCESS / CONFIRMATION -->
   <div class="book-form-card book-success" id="bookSuccess" style="display:none;">
-    <div class="success-icon">🎉</div>
-    <h4 data-i18n="successTitle">You're on the list!</h4>
-    <p data-i18n="successBody">Thanks — we've received your details and will reach out within 24 hours to schedule your setup call.</p>
-    <p class="book-success-note" data-i18n="successNote">Prefer to talk right now? Call one of our live AI agents:</p>
-    <div class="book-success-calls">
-      <a href="tel:+18324301032" class="btn-outline">🇺🇸 Houston — (832) 430-1032</a>
-      <a href="tel:+34911677963" class="btn-outline">🇪🇸 Madrid — +34 911 677 963</a>
+    <div id="bookSuccessBody">
+      <div class="success-icon">🎉</div>
+      <h4 data-i18n="successTitle">You're on the list!</h4>
+      <p data-i18n="successBody">Thanks — we've received your details and will reach out within 24 hours to schedule your setup call.</p>
+      <p class="book-success-note" data-i18n="successNote">Prefer to talk right now? Call one of our live AI agents:</p>
+      <div class="book-success-calls">
+        <a href="tel:+18324301032" class="btn-outline">🇺🇸 Houston — (832) 430-1032</a>
+        <a href="tel:+34911677963" class="btn-outline">🇪🇸 Madrid — +34 911 677 963</a>
+      </div>
     </div>
   </div>
 
@@ -277,20 +308,36 @@ const BOOK_I18N = {
     formSub: "We'll reach out within 24 hours to schedule your setup call.",
     lblName: 'Your Name *', phName: 'John Smith',
     lblEmail: 'Email Address *', phEmail: 'john@restaurant.com',
-    lblPhone: 'Phone Number', phPhone: '+1 555 000 0000',
-    lblRestaurant: 'Restaurant Name', phRestaurant: 'My Restaurant',
+    lblPhone: 'Phone Number *', phPhone: '+1 555 000 0000',
+    lblRestaurant: 'Restaurant Name *', phRestaurant: 'My Restaurant',
     lblLocations: 'Number of Locations',
     optSelect: 'Select...', opt1: '1 location', opt2: '2-5 locations', opt3: '6-10 locations', opt4: '10+ locations',
     lblChallenge: "What's your biggest challenge right now? *",
     phChallenge: 'Missed calls during rush hour, slow WhatsApp replies, no-shows...',
-    submit: 'Request My Demo →',
-    sending: 'Sending...',
+    submit: 'See Available Times →',
+    sending: 'Finding available times...',
     error: 'Something went wrong — please try again, or email hello@talkserveai.net',
     successTitle: "You're on the list! 🎉",
     successBody: "Thanks — we've received your details and will reach out within 24 hours to schedule your setup call.",
     successNote: 'Prefer to talk right now? Call one of our live AI agents:',
     finePrint: 'Every setup call is confirmed personally by our team — never scheduled automatically.',
-    switchTo: '🇪🇸 Español'
+    switchTo: '🇪🇸 Español',
+    slotsTitle: 'Choose a time for your demo',
+    slotsSub: 'Pick any open time below — these are real openings on our calendar.',
+    editInfo: '← Edit info',
+    slotsLoading: 'Checking real-time availability...',
+    slotsTzNote: "Times shown below are in our team's timezone ({tz}).",
+    slotsErrorTitle: "We couldn't load available times",
+    slotsErrorBody: "Please try again in a moment, or call us directly and we'll schedule you by hand:",
+    slotsEmptyTitle: 'No open times right now',
+    slotsEmptyBody: "Our calendar is fully booked for the next few days. We've saved your details and will reach out within 24 hours — or call us directly:",
+    slotsRetry: 'Try again',
+    slotsTaken: 'That time was just taken by someone else. Please choose another available time below.',
+    slotsConfirming: 'Confirming your booking...',
+    slotsConfirmError: "We couldn't confirm that booking. Please try again, or call us directly:",
+    confirmedTitle: "You're booked!",
+    confirmedBody: "Your TalkServeAI demo is confirmed for {date} at {time}. We'll see you then.",
+    confirmRef: 'Booking reference: {id}'
   },
   es: {
     label: 'RESERVA UNA DEMO',
@@ -301,20 +348,36 @@ const BOOK_I18N = {
     formSub: 'Te contactaremos en menos de 24 horas para agendar tu llamada de configuración.',
     lblName: 'Tu Nombre *', phName: 'Juan Pérez',
     lblEmail: 'Correo Electrónico *', phEmail: 'juan@restaurante.com',
-    lblPhone: 'Número de Teléfono', phPhone: '+34 600 000 000',
-    lblRestaurant: 'Nombre del Restaurante', phRestaurant: 'Mi Restaurante',
+    lblPhone: 'Número de Teléfono *', phPhone: '+34 600 000 000',
+    lblRestaurant: 'Nombre del Restaurante *', phRestaurant: 'Mi Restaurante',
     lblLocations: 'Número de Ubicaciones',
     optSelect: 'Selecciona...', opt1: '1 ubicación', opt2: '2-5 ubicaciones', opt3: '6-10 ubicaciones', opt4: '10+ ubicaciones',
     lblChallenge: '¿Cuál es tu mayor desafío ahora mismo? *',
     phChallenge: 'Llamadas perdidas en hora punta, respuestas lentas por WhatsApp, no-shows...',
-    submit: 'Solicitar Mi Demo →',
-    sending: 'Enviando...',
+    submit: 'Ver Horarios Disponibles →',
+    sending: 'Buscando horarios disponibles...',
     error: 'Algo salió mal — inténtalo de nuevo o escribe a hello@talkserveai.net',
     successTitle: '¡Ya estás en la lista! 🎉',
     successBody: 'Gracias — hemos recibido tus datos y te contactaremos en menos de 24 horas para agendar tu llamada.',
     successNote: '¿Prefieres hablar ahora? Llama a uno de nuestros agentes de IA en vivo:',
     finePrint: 'Cada llamada de configuración la confirma personalmente nuestro equipo — nunca se agenda de forma automática.',
-    switchTo: '🇬🇧 English'
+    switchTo: '🇬🇧 English',
+    slotsTitle: 'Elige un horario para tu demo',
+    slotsSub: 'Elige cualquier horario disponible — son huecos reales en nuestro calendario.',
+    editInfo: '← Editar información',
+    slotsLoading: 'Consultando disponibilidad en tiempo real...',
+    slotsTzNote: 'Los horarios que ves aquí están en la zona horaria de nuestro equipo ({tz}).',
+    slotsErrorTitle: 'No pudimos cargar los horarios disponibles',
+    slotsErrorBody: 'Inténtalo de nuevo en un momento, o llámanos directamente y te agendamos a mano:',
+    slotsEmptyTitle: 'No hay horarios disponibles ahora mismo',
+    slotsEmptyBody: 'Nuestro calendario está completo por los próximos días. Ya guardamos tus datos y te contactaremos en menos de 24 horas — o llámanos directamente:',
+    slotsRetry: 'Intentar de nuevo',
+    slotsTaken: 'Ese horario acaba de ser reservado por alguien más. Por favor, elige otro horario disponible abajo.',
+    slotsConfirming: 'Confirmando tu reserva...',
+    slotsConfirmError: 'No pudimos confirmar esa reserva. Inténtalo de nuevo, o llámanos directamente:',
+    confirmedTitle: '¡Tu demo está confirmada!',
+    confirmedBody: 'Tu demo de TalkServeAI está programada para el {date} a las {time}. ¡Nos vemos!',
+    confirmRef: 'Referencia de reserva: {id}'
   }
 };
 
@@ -348,34 +411,262 @@ document.getElementById('langSwitchBtn').addEventListener('click', function() {
   applyBookLang(current);
 });
 
-document.getElementById('bookForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const lang = document.getElementById('htmlRoot').lang === 'es' ? 'es' : 'en';
+// ---- Real live booking: n8n production webhooks (real Google Calendar backend) ----
+// These are the real, active production webhook URLs for the
+// "TalkServeAI - Demo Booking System" n8n workflow. Never point these at
+// the /webhook-test/ equivalents.
+const N8N_AVAILABILITY_URL = 'https://talkserveai.app.n8n.cloud/webhook/book-availability';
+const N8N_CONFIRM_URL = 'https://talkserveai.app.n8n.cloud/webhook/book-confirm';
+
+let currentBooking = null; // {name,email,phone,restaurant,locations,main_challenge,bookingId}
+let currentTimezone = null;
+let currentSlots = [];
+
+function getLang() {
+  return document.getElementById('htmlRoot').lang === 'es' ? 'es' : 'en';
+}
+
+function escapeHtml(str) {
+  return String(str == null ? '' : str).replace(/[&<>"']/g, function(c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+function getOrCreateBookingId(email) {
+  const storageKey = 'tsai_booking_id_' + String(email || '').trim().toLowerCase();
+  try {
+    const existing = sessionStorage.getItem(storageKey);
+    if (existing) return existing;
+  } catch (err) { /* sessionStorage unavailable — fall through to a fresh id */ }
+  const id = 'web_' + ((window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2)));
+  try { sessionStorage.setItem(storageKey, id); } catch (err) { /* ignore */ }
+  return id;
+}
+
+async function postJSON(url, body, timeoutMs) {
+  const controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  const timer = controller ? setTimeout(function () { controller.abort(); }, timeoutMs || 20000) : null;
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body || {}),
+      signal: controller ? controller.signal : undefined
+    });
+    if (timer) clearTimeout(timer);
+    let data = null;
+    try { data = await res.json(); } catch (parseErr) { data = null; }
+    return { httpOk: res.ok, data: data };
+  } catch (err) {
+    if (timer) clearTimeout(timer);
+    return { httpOk: false, data: null, networkError: true };
+  }
+}
+
+function formatSlotLabels(isoStart, timezone, lang) {
+  const d = new Date(isoStart);
+  const locale = lang === 'es' ? 'es-ES' : 'en-US';
+  const dateLabel = new Intl.DateTimeFormat(locale, { timeZone: timezone, weekday: 'long', month: 'long', day: 'numeric' }).format(d);
+  const timeLabel = new Intl.DateTimeFormat(locale, { timeZone: timezone, hour: 'numeric', minute: '2-digit', hour12: true }).format(d);
+  return { dateLabel: dateLabel, timeLabel: timeLabel };
+}
+
+const CALL_FALLBACK_HTML = '<div class="book-success-calls">' +
+  '<a href="tel:+18324301032" class="btn-outline">🇺🇸 Houston — (832) 430-1032</a>' +
+  '<a href="tel:+34911677963" class="btn-outline">🇪🇸 Madrid — +34 911 677 963</a>' +
+  '</div>';
+
+function showSlotsLoading() {
+  const dict = BOOK_I18N[getLang()];
+  document.getElementById('slotsBody').innerHTML =
+    '<div class="slots-status"><div class="slots-spinner"></div>' + escapeHtml(dict.slotsLoading) + '</div>';
+}
+
+function showSlotsError() {
+  const dict = BOOK_I18N[getLang()];
+  document.getElementById('slotsBody').innerHTML =
+    '<div class="slots-notice slots-notice-error"><strong>' + escapeHtml(dict.slotsErrorTitle) + '</strong></div>' +
+    '<p style="color:var(--muted);font-size:0.9rem;text-align:center;margin-bottom:1rem;">' + escapeHtml(dict.slotsErrorBody) + '</p>' +
+    CALL_FALLBACK_HTML +
+    '<div style="text-align:center;"><button type="button" class="slots-retry-btn" id="slotsRetryBtn">' + escapeHtml(dict.slotsRetry) + '</button></div>';
+  const retryBtn = document.getElementById('slotsRetryBtn');
+  if (retryBtn) retryBtn.addEventListener('click', fetchAvailability);
+}
+
+function showSlotsEmpty() {
+  const dict = BOOK_I18N[getLang()];
+  document.getElementById('slotsBody').innerHTML =
+    '<div class="slots-notice"><strong>' + escapeHtml(dict.slotsEmptyTitle) + '</strong></div>' +
+    '<p style="color:var(--muted);font-size:0.9rem;text-align:center;margin-bottom:1rem;">' + escapeHtml(dict.slotsEmptyBody) + '</p>' +
+    CALL_FALLBACK_HTML;
+}
+
+function renderSlots(data) {
+  const lang = getLang();
   const dict = BOOK_I18N[lang];
+  currentTimezone = data.timezone;
+  currentSlots = data.slots || [];
+  if (!currentSlots.length) { showSlotsEmpty(); return; }
+
+  const groups = [];
+  const byKey = {};
+  currentSlots.forEach(function (slot, idx) {
+    const d = new Date(slot.isoStart);
+    const dayKey = new Intl.DateTimeFormat('en-CA', { timeZone: currentTimezone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+    const labels = formatSlotLabels(slot.isoStart, currentTimezone, lang);
+    if (!byKey[dayKey]) {
+      byKey[dayKey] = { dateLabel: labels.dateLabel, items: [] };
+      groups.push(byKey[dayKey]);
+    }
+    byKey[dayKey].items.push({ idx: idx, timeLabel: labels.timeLabel });
+  });
+
+  let html = '<p class="slots-tz-note">' + escapeHtml(dict.slotsTzNote.replace('{tz}', currentTimezone)) + '</p>';
+  groups.forEach(function (g) {
+    html += '<div class="slots-day-group"><div class="slots-day-label">' + escapeHtml(g.dateLabel) + '</div><div class="slots-day-times">';
+    g.items.forEach(function (item) {
+      html += '<button type="button" class="slot-btn" data-slot-idx="' + item.idx + '">' + escapeHtml(item.timeLabel) + '</button>';
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('slotsBody').innerHTML = html;
+  document.querySelectorAll('#slotsBody .slot-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const idx = parseInt(btn.getAttribute('data-slot-idx'), 10);
+      selectSlot(currentSlots[idx]);
+    });
+  });
+}
+
+async function fetchAvailability() {
+  showSlotsLoading();
+  const result = await postJSON(N8N_AVAILABILITY_URL, { language: getLang() }, 20000);
+  if (!result.httpOk || !result.data || result.data.ok !== true) {
+    showSlotsError();
+    return;
+  }
+  if (!result.data.slots || !result.data.slots.length) {
+    showSlotsEmpty();
+    return;
+  }
+  renderSlots(result.data);
+}
+
+async function showSlotTakenAndRefresh() {
+  const dict = BOOK_I18N[getLang()];
+  await fetchAvailability();
+  document.getElementById('slotsBody').insertAdjacentHTML('afterbegin', '<div class="slots-notice slots-notice-error">' + escapeHtml(dict.slotsTaken) + '</div>');
+}
+
+function showSlotsConfirmError() {
+  const dict = BOOK_I18N[getLang()];
+  const status = document.getElementById('slotsConfirmingStatus');
+  if (status) status.remove();
+  document.getElementById('slotsBody').insertAdjacentHTML('afterbegin',
+    '<div class="slots-notice slots-notice-error"><strong>' + escapeHtml(dict.slotsConfirmError) + '</strong></div>' +
+    CALL_FALLBACK_HTML
+  );
+  document.querySelectorAll('#slotsBody .slot-btn').forEach(function (b) { b.disabled = false; });
+}
+
+function showConfirmed(data) {
+  const lang = getLang();
+  const dict = BOOK_I18N[lang];
+  const bodyText = dict.confirmedBody.replace('{date}', data.date || '').replace('{time}', data.time || '');
+  const refText = dict.confirmRef.replace('{id}', data.bookingId || '');
+  document.getElementById('bookSuccessBody').innerHTML =
+    '<div class="success-icon">🎉</div>' +
+    '<h4>' + escapeHtml(dict.confirmedTitle) + '</h4>' +
+    '<p>' + escapeHtml(bodyText) + '</p>' +
+    '<p class="confirm-ref">' + escapeHtml(refText) + '</p>';
+  document.getElementById('bookSlotsCard').style.display = 'none';
+  document.getElementById('bookSuccess').style.display = 'block';
+  document.getElementById('bookSuccess').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  try { sessionStorage.removeItem('tsai_booking_id_' + String(currentBooking.email || '').trim().toLowerCase()); } catch (err) { /* ignore */ }
+}
+
+async function selectSlot(slot) {
+  const lang = getLang();
+  const dict = BOOK_I18N[lang];
+  document.querySelectorAll('#slotsBody .slot-btn').forEach(function (b) { b.disabled = true; });
+  document.getElementById('slotsBody').insertAdjacentHTML('afterbegin',
+    '<div class="slots-status" id="slotsConfirmingStatus"><div class="slots-spinner"></div>' + escapeHtml(dict.slotsConfirming) + '</div>');
+
+  const labels = formatSlotLabels(slot.isoStart, currentTimezone, lang);
+  const payload = {
+    name: currentBooking.name,
+    email: currentBooking.email,
+    phone: currentBooking.phone,
+    restaurant: currentBooking.restaurant,
+    locations: currentBooking.locations,
+    main_challenge: currentBooking.main_challenge,
+    language: lang,
+    slotStart: slot.isoStart,
+    slotEnd: slot.isoEnd,
+    dateLabel: labels.dateLabel,
+    timeLabel: labels.timeLabel,
+    timezone: currentTimezone,
+    bookingId: currentBooking.bookingId
+  };
+
+  const result = await postJSON(N8N_CONFIRM_URL, payload, 20000);
+
+  if (!result.httpOk || !result.data) { showSlotsConfirmError(); return; }
+  const data = result.data;
+  if (data.ok === true) { showConfirmed(data); return; }
+  if (data.errorCode === 'slot_taken') { showSlotTakenAndRefresh(); return; }
+  showSlotsConfirmError();
+}
+
+document.getElementById('slotsEditBtn').addEventListener('click', function () {
+  document.getElementById('bookSlotsCard').style.display = 'none';
+  document.getElementById('bookFormCard').style.display = 'block';
+  document.getElementById('bookFormCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+document.getElementById('bookForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const lang = getLang();
+  const dict = BOOK_I18N[lang];
+  const form = this;
+
+  if (!form.reportValidity()) return;
+
+  const name = document.getElementById('fName').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+  const phone = document.getElementById('fPhone').value.trim();
+  const restaurant = document.getElementById('fRestaurant').value.trim();
+  const locations = document.getElementById('fLocations').value;
+  const mainChallenge = document.getElementById('fChallenge').value.trim();
+
+  currentBooking = {
+    name: name, email: email, phone: phone, restaurant: restaurant,
+    locations: locations, main_challenge: mainChallenge,
+    bookingId: getOrCreateBookingId(email)
+  };
+
+  // Best-effort lead capture into the existing Formspree inbox — fired in the
+  // background so it never blocks or breaks the real calendar booking flow.
+  try {
+    fetch('https://formspree.io/f/xwvalojd', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).catch(function () {});
+  } catch (err) { /* ignore — booking flow does not depend on this */ }
+
   const btn = document.getElementById('bookSubmitBtn');
-  const originalText = btn.textContent;
   btn.textContent = dict.sending;
   btn.disabled = true;
-  try {
-    const res = await fetch('https://formspree.io/f/xwvalojd', {
-      method: 'POST',
-      body: new FormData(this),
-      headers: { 'Accept': 'application/json' }
-    });
-    if (res.ok) {
-      document.getElementById('bookFormCard').style.display = 'none';
-      document.getElementById('bookSuccess').style.display = 'block';
-      document.getElementById('bookSuccess').scrollIntoView({behavior:'smooth', block:'start'});
-    } else {
-      btn.textContent = dict.error;
-      btn.disabled = false;
-      setTimeout(function(){ btn.textContent = originalText; }, 3500);
-    }
-  } catch (err) {
-    btn.textContent = dict.error;
-    btn.disabled = false;
-    setTimeout(function(){ btn.textContent = originalText; }, 3500);
-  }
+
+  document.getElementById('bookFormCard').style.display = 'none';
+  document.getElementById('bookSlotsCard').style.display = 'block';
+  document.getElementById('bookSlotsCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  btn.textContent = dict.submit;
+  btn.disabled = false;
+
+  fetchAvailability();
 });
 
 // Default to English on load (both languages visible in the initial prompt text itself)
